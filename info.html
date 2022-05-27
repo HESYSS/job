@@ -1,0 +1,99 @@
+<?php
+include ("bd.php");
+if(isset($_GET['inf'])) {?>
+
+<html>
+	<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Детали</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/headers/">
+
+    
+
+    <!-- Bootstrap core CSS -->
+<link href="bootstrap-5.1.3-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="headers.css" rel="stylesheet">
+
+	</head>
+<body>
+
+		<div class="container">
+			<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+				<a  class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+					<svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+					<span class="fs-4"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Детали</font></font></span>
+				</a>
+			</header>
+		</div>
+<form>
+			<?php
+				$sql = 'SELECT id, name, time, latitude, longitude, county  FROM meating';
+				$result = mysqli_query($bd, $sql);
+				$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+				$number = $_GET['inf']-1;
+				$lat = $rows[$number]['latitude'];
+				$lng = $rows[$number]['longitude'];
+			echo('<p><div class="bd-example"><h3 style="text-indent:10%">Название</h3></div></p>');
+			
+			echo("<p><textarea rows=\"10\" cols=\"50%\" name=\"text\" disabled wrap=\"hard\">" .$rows[$number]['name'] ."  </textarea></p>");
+			echo('<p><div class="bd-example"><h3 style="text-indent:10%">Дата</h3></div></p>');
+			echo("<p><textarea rows=\"1%\" cols=\"50%\" name=\"text\" disabled>" .$rows[$number]['time'] ."  </textarea></p>");
+			echo('<p><div class="bd-example"><h3 style="text-indent:5%">Место расположения</h3></div></p>');
+			?>
+
+
+
+
+<p><div id="map" style="width:30%;height:50%"></div>
+<script>
+function myMap() {
+	var lat = '<?=$lat;?>'
+	var lng = '<?=$lng;?>'
+  var myCenter = new google.maps.LatLng(lat,lng);
+  var mapCanvas = document.getElementById("map");
+  var mapOptions = {center: myCenter, zoom: 5};
+  var map = new google.maps.Map(mapCanvas, mapOptions);
+  var marker = new google.maps.Marker({position:myCenter});
+  marker.setMap(map);
+}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIVG079WhulATznnvpOAKGEPAagg8TIrA&callback=myMap" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></script>
+</p>
+<?php
+echo("<p><textarea rows=\"1%\" cols=\"50%\" name=\"text\" disabled>" .$rows[$number]['latitude'] ." </textarea></p>");
+echo("<p><textarea rows=\"1%\" cols=\"50%\" name=\"text\" disabled>" .$rows[$number]['longitude'] ."  </textarea></p>");
+echo('<p><div class="bd-example"><h3 style="text-indent:10%">Страна</h3></div></p>');
+echo("<p><textarea rows=\"1%\" cols=\"50%\" name=\"text\" disabled>" .$rows[$number]['county'] ."  </textarea></p>");
+echo("<p><a href =\"delete.php?del=".$rows[$number]['id']."\" ><button type=\"button\" class=\"btn btn-light\">Удалить</button></a></p>");?>
+<p><button type="button" class="btn btn-light" onclick="Back()">Назад</button></p>
+</form>
+<script src="Upload.js"></script>
+</body>
+</html>
+<?php
+};?>
+
+
